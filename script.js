@@ -33,7 +33,7 @@ function registrarUsuario() {
     telefono: telefono || "No proporcionado",
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbwldvNZJ0cdxo0bbRTYFABUqVsyXnuLeQc0j6fLbO0NenBcnB0O_uoYL4o9vX51gFWgFg/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbxS85c863zH7sN-ynorHyaujR6nciZO4_Btx9GUVsIgZ4B3gTvghuXmE6uRVZq8ObuQ0g/exec", {
     method: "POST",
     body: JSON.stringify(payload),
   })
