@@ -2,28 +2,25 @@ const tcBox = document.getElementById("tcBox");
 const check = document.getElementById("aceptarTerminos");
 const btn = document.getElementById("btnAceptar");
 
-// 1. Activar checkbox al llegar al final del scroll
-tcBox.addEventListener("scroll", function () {
+// Activar checkbox al llegar al final del scroll
+tcBox.addEventListener("scroll", () => {
   const bottom = tcBox.scrollHeight - tcBox.scrollTop - tcBox.clientHeight;
-  if (bottom <= 0) {
-    check.disabled = false;
-  }
+  if (bottom <= 0) check.disabled = false;
 });
 
-// 2. Activar botón al marcar checkbox
-check.addEventListener("change", function () {
+// Activar botón al marcar checkbox
+check.addEventListener("change", () => {
   btn.disabled = !check.checked;
 });
 
-// 3. Registrar usuario y enviar a Google Sheets
-function registrarUsuario() {
+// Registrar usuario y enviar a Google Sheets
+async function registrarUsuario() {
   const nombre = document.getElementById("nombre").value.trim();
   const organizacion = document.getElementById("organizacion").value.trim();
   const telefono = document.getElementById("telefono").value.trim();
 
-  // Validar campos obligatorios
   if (!nombre || !organizacion) {
-    alert("Por favor completa Nombre y Organización.");
+    alert("Por favor completa los campos obligatorios.");
     return;
   }
 
@@ -33,16 +30,20 @@ function registrarUsuario() {
     telefono: telefono || "No proporcionado",
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbxKqao1cWF7UVWoAzOBjRnGWcTedpdU0KQyyIgjDgOn5KImYeCWBe8SDjojcDxWopAlAw/exec", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  })
-    .then((response) => response.text())
-    .then(() => {
-      alert("Datos registrados correctamente.");
-    })
-    .catch((error) => {
-      alert("Error al enviar los datos.");
-      console.log(error);
-    });
+  try {
+    const response = await fetch(
+      "https://script.google.com/macros/s/AKfycbzP1MDbrH6Q8_FO1B0BHj5Sti_Zgq1rjeR8dlAdTruaUm3oJrrOaKIZYH81_0EiOcav8Q/exec",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    await response.text();
+    alert("Has aceptado los términos y condiciones. ¡Registro completado!");
+  } catch (error) {
+    console.error(error);
+    alert("Ocurrió un error al registrar los datos.");
+  }
 }
